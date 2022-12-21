@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+* {
+  font-family: 'Roboto Slab', serif;;
+}
+  
+div {
+  display: flex;
+  justify-content: start;
+  margin: 14px 0;
+}
+
+label {
+  display: inline-block;
+  min-width: 100px;
+}
+
+button {
+  margin-top: 20px;
+}
+
+.sized-button {
+  width: 100px;
+}
+
+.heart-unfilled {
+	background-image: url("../heart-unfilled-white.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+  border: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.heart-filled {
+  background-image: url("../heart-filled-white.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+  border: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.heart-button:hover {
+	transform: scale(1.2);
+}

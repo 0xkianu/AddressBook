@@ -1,0 +1,71 @@
+<header class="d-flex flex-column align-items-center">
+  <form class="d-flex my-3" id="searchForm" action="/contacts/search" method="POST" >
+    <input class="form-control me-1" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+    <button class="btn btn-success" type="submit">Search</button>
+  </form>
+  <div class="d-flex flex-row">
+    <a href="/contacts/list" class="btn btn-success mx-2">Contacts</a>
+    <a href="/contacts/favorite" class="btn btn-success me-2">Favorites</a>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#contactModal">+</button>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactModalLabel">New Contact</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="form" action="/contacts/add" method="POST" >
+                <fieldset>
+                  <legend>Contact Details</legend>
+                  <div>
+                    <label for="fname">First Name</label>
+                    <input type="text" name="fname" id="fname" />
+                  </div>
+                  <div>
+                    <label for="lname">Last Name</label>
+                    <input type="text" name="lname" id="lname" />
+                  </div>
+                  <div>
+                    <label for="address1">Address1</label>
+                    <input type="text" name="address1" id="address1" />
+                  </div>
+                  <div>
+                    <label for="address2">Address2</label>
+                    <input type="text" name="address2" id="address2" />
+                  </div>
+                  <div>
+                    <label for="city">City</label>
+                    <input type="text" name="city" id="city" />
+                  </div>
+                  <div>
+                    <label for="state">State</label>
+                    <input type="text" name="state" id="state" />
+                  </div>
+                  <div>
+                    <label for="zipcode">Zip Code</label>
+                    <input type="number" name="zipcode" id="zipcode" />
+                  </div>
+                  <div>
+                    <label for="phone">Phone #</label>
+                    <input type="text" name="phone" id="phone" />
+                  </div>
+                  <div>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" />
+                  </div>
+                </fieldset>
+                <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Add Contact</button>
+              </form>        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

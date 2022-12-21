@@ -1,0 +1,84 @@
+<% contactsArray.forEach((element,index) => { %>
+<div class="card w-50">
+    <div class="card-body d-flex flex-column">
+      <form id="contact-form" action="/contacts/list" method="POST" class="d-flex flex-column">
+        <h5 class="card-title"><%= element.fname %> <%= element.lname %></h5>
+        <p class="card-text">Adress: <%= element.address1 %></p>
+        <p class="card-text">Adress: <%= element.address2 %></p>
+        <p class="card-text">City: <%= element.city %></p>
+        <p class="card-text">State: <%= element.state %></p>
+        <p class="card-text">Zip Code: <%= element.zipcode %></p>
+        <p class="card-text">Phone Number: <%= element.phone %></p>
+        <p class="card-text">E-mail: <%= element.email %></p>
+        <input class="invisible" type="text" id="index" name="index" value="<%= index %>">
+        <button class="btn btn-success my-2 sized-button" type="submit">Delete</button>
+      </form>
+        <button type="button" class="btn btn-success sized-button" data-bs-toggle="modal" data-bs-target="#contactModal<%= index %>">Edit</button>
+        <% if(element.fav === false) { %>
+          <button type="button" class="heart-button heart-unfilled my-2" data-index="<%= index %>"></button>
+        <% } else if(element.fav === true) { %>
+          <button type="button" class="heart-button heart-filled my-2" data-index="<%= index %>"></button>
+        <% } %>
+  <!-- Modal -->
+          <div class="modal fade" id="contactModal<%= index %>" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="contactModalLabel">Edit Contact</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column">
+                    <form id="form" action="/contacts/edit" method="POST" >
+                        <fieldset>
+                          <legend>Contact Details</legend>
+                          <div>
+                            <label for="fname">First Name</label>
+                            <input type="text" name="fname" id="fname" value="<%= element.fname %>" />
+                          </div>
+                          <div>
+                            <label for="lname">Last Name</label>
+                            <input type="text" name="lname" id="lname" value="<%= element.lname %>" />
+                          </div>
+                          <div>
+                            <label for="address1">Address1</label>
+                            <input type="text" name="address1" id="address1" value="<%= element.address1 %>" />
+                          </div>
+                          <div>
+                            <label for="address2">Address2</label>
+                            <input type="text" name="address2" id="address2" value="<%= element.address2 %>" />
+                          </div>
+                          <div>
+                            <label for="city">City</label>
+                            <input type="text" name="city" id="city" value="<%= element.city %>" />
+                          </div>
+                          <div>
+                            <label for="state">State</label>
+                            <input type="text" name="state" id="state" value="<%= element.state %>" />
+                          </div>
+                          <div>
+                            <label for="zipcode">Zip Code</label>
+                            <input type="number" name="zipcode" id="zipcode" value="<%= element.zipcode %>" />
+                          </div>
+                          <div>
+                            <label for="phone">Phone #</label>
+                            <input type="text" name="phone" id="phone" value="<%= element.phone %>" />
+                          </div>
+                          <div>
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" value="<%= element.email %>" />
+                          </div>
+                          <input type="text" class="invisible" id="indexEdit" name="indexEdit" value="<%= index %>">
+                        </fieldset>
+                        <button type="submit" class="btn btn-success sized-button" data-bs-dismiss="modal">Save</button>
+                      </form>        
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+<% }) %>
