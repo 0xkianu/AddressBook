@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const contactsArray = [];
 const path = require('path');
 const express = require('express');
 const pgp = require("pg-promise")();
