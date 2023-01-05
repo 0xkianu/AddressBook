@@ -10,17 +10,17 @@
         <p class="card-text">Zip Code: <%= element.zipcode %></p>
         <p class="card-text">Phone Number: <%= element.phone %></p>
         <p class="card-text">E-mail: <%= element.email %></p>
-        <input class="invisible" type="text" id="index" name="index" value="<%= index %>">
+        <input class="invisible" type="text" id="index" name="index" value="<%= element.id %>">
         <button class="btn btn-success my-2 sized-button" type="submit">Delete</button>
       </form>
-        <button type="button" class="btn btn-success sized-button" data-bs-toggle="modal" data-bs-target="#contactModal<%= index %>">Edit</button>
+        <button type="button" class="btn btn-success sized-button" data-bs-toggle="modal" data-bs-target="#contactModal<%= element.id %>">Edit</button>
         <% if(element.fav === false) { %>
-          <button type="button" class="heart-button heart-unfilled my-2" data-index="<%= index %>"></button>
+          <button type="button" class="heart-button heart-unfilled my-2" data-index="<%= element.id %>"></button>
         <% } else if(element.fav === true) { %>
-          <button type="button" class="heart-button heart-filled my-2" data-index="<%= index %>"></button>
+          <button type="button" class="heart-button heart-filled my-2" data-index="<%= element.id %>"></button>
         <% } %>
   <!-- Modal -->
-          <div class="modal fade" id="contactModal<%= index %>" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+          <div class="modal fade" id="contactModal<%= element.id %>" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -57,7 +57,7 @@
                           </div>
                           <div>
                             <label for="zipcode">Zip Code</label>
-                            <input type="number" name="zipcode" id="zipcode" value="<%= element.zipcode %>" />
+                            <input type="text" pattern="[0-9]*" name="zipcode" id="zipcode" value="<%= element.zipcode %>" />
                           </div>
                           <div>
                             <label for="phone">Phone #</label>
@@ -67,7 +67,7 @@
                             <label for="email">Email</label>
                             <input type="text" name="email" id="email" value="<%= element.email %>" />
                           </div>
-                          <input type="text" class="invisible" id="indexEdit" name="indexEdit" value="<%= index %>">
+                          <input type="text" class="invisible" id="indexEdit" name="indexEdit" value="<%= element.id %>">
                         </fieldset>
                         <button type="submit" class="btn btn-success sized-button" data-bs-dismiss="modal">Save</button>
                       </form>        

@@ -2,70 +2,62 @@ const router = require('express').Router();
 const contactsArray = [];
 const path = require('path');
 const express = require('express');
+const pgp = require("pg-promise")();
+
 router.use(express.static(path.join(__dirname, '../public')));
+const db = pgp("postgres://postgres:Arako200@localhost:5432/contactbook");
 
 router.post('/add', async (req, res) => {
     const { fname,lname,address1,address2,city,state,zipcode,phone,email } = req.body;
-    contactsArray.push({"fname": fname, "lname": lname, "city": city, "state": state, "zipcode": zipcode, "address1": address1, "address2": address2, "phone": phone, "email":email, "fav":false});
+    db.none("INSERT into public.contacts(fname,lname,city,state,zipcode,address1,address2,phone,email,fav) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);", [
+        fname,
+        lname,
+        city,
+        state,
+        zipcode,
+        address1,
+        address2,
+        phone,
+        email,
+        false
+    ]);
 });
   
-router.get('/add', (req, res) => {
-    res.render('contact-form');
-});
-
 router.get('/list', (req, res) => {
-    res.render('contact-list', {contactsArray});
+    db.any("SELECT * from public.contacts;").then((contacts) => res.render('contact-list', {contactsArray: contacts}));
 });
 
 router.post('/list', (req, res) => {
-    contactsArray.splice(req.body.index,1);
-    res.render('contact-list', {contactsArray});
+    db.none("DELETE from public.contacts where id = $1;", [req.body.index]);
+    db.any("SELECT * from public.contacts;").then((contacts) => res.render('contact-list', {contactsArray: contacts}));
 });
 
 router.get('/edit', (req, res) => {
-    res.render('contact-list', {contactsArray});
+    db.any("SELECT * from public.contacts;").then((contacts) => res.render('contact-list', {contactsArray: contacts}));
 });
 
 router.post('/edit', (req, res) => {
-    contactsArray[req.body.indexEdit].fname = req.body.fname;
-    contactsArray[req.body.indexEdit].lname = req.body.lname;
-    contactsArray[req.body.indexEdit].address1 = req.body.address1;
-    contactsArray[req.body.indexEdit].address2 = req.body.address2;
-    contactsArray[req.body.indexEdit].city = req.body.city;
-    contactsArray[req.body.indexEdit].state = req.body.state;
-    contactsArray[req.body.indexEdit].zipcode = req.body.zipcode;
-    contactsArray[req.body.indexEdit].phone = req.body.phone;
-    contactsArray[req.body.indexEdit].email = req.body.email;
-    res.render('contact-list', {contactsArray});
+    db.none("UPDATE public.contacts set fname=$1,lname=$2,address1=$3,address2=$4,city=$5,state=$6,zipcode=$7,phone=$8,email=$9 where id=$10;", [req.body.fname,req.body.lname,req.body.address1,req.body.address2,req.body.city,req.body.state,req.body.zipcode,req.body.phone,req.body.email,req.body.indexEdit]);
+    db.any("SELECT * from public.contacts;").then((contacts) => res.render('contact-list', {contactsArray: contacts}));
 });
 
 router.post('/search', (req, res) => {
-    const searchArray = [];
-    const matchRegExp = new RegExp(req.body.search, 'i');
-    for(let i = 0; i < contactsArray.length; i++) {
-        if((contactsArray[i].fname.match(matchRegExp)) || (contactsArray[i].lname.match(matchRegExp))) {
-            searchArray.push(contactsArray[i]);
-        }
-    }
-    res.render('contact-list', {contactsArray: searchArray});
+    const searchStr = `%${req.body.search}%`;
+    db.any("SELECT * from public.contacts where upper(fname) like upper($1) or upper(lname) like upper($1);", searchStr).then((contacts) => res.render('contact-list', {contactsArray: contacts}));
 });
 
 router.post('/favorite',(req, res) => {
-    if(contactsArray[`${req.body.id}`].fav === true) {
-        contactsArray[`${req.body.id}`].fav = false;
-    } else {
-        contactsArray[`${req.body.id}`].fav = true;
-    }
+    db.any("SELECT fav from public.contacts where id=$1;",[req.body.id]).then((contact) => {
+        if(contact[0].fav) {
+            db.none("UPDATE public.contacts set fav=false where id = $1;", [req.body.id]);
+        } else {
+            db.none("UPDATE public.contacts set fav=true where id = $1;", [req.body.id]);
+        }
+    });
 });
 
 router.get('/favorite',(req, res) => {
-    const favArray = [];
-    for(let i = 0; i < contactsArray.length; i++) {
-        if(contactsArray[i].fav === true) {
-            favArray.push(contactsArray[i]);
-        }
-    }
-    res.render('contact-list', {contactsArray: favArray});
+    db.any("SELECT * from public.contacts where fav=true;").then((contacts) => res.render('contact-list', {contactsArray: contacts}));
 });
 
 module.exports = router;
