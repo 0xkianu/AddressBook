@@ -66,17 +66,20 @@ router.post('/edit', async (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
-    const searchStr = `%${req.body.search}%`;
+    let searchStr = `%${req.body.search}%`;
+    searchStr = searchStr.toLowerCase();
     //db.any("SELECT * from public.contacts where upper(fname) like upper($1) or upper(lname) like upper($1);", searchStr).then((contacts) => res.render('contact-list', {contactsArray: contacts}));
     const contact = await Contact.findAll({
         where: {
           [Op.or]: {
-            fname: {
-                [Op.like]: searchStr
-              },
-            lname: {
-                [Op.like]: searchStr
-              } 
+            /*fname: {
+                $iLike: searchStr
+              },*/
+            fname: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('fname')), 'LIKE', searchStr),
+            lname: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('lname')), 'LIKE', searchStr)
+            /*lname: {
+                $iLike: searchStr
+              } */
           }
         }
     });
